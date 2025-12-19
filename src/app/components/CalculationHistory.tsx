@@ -1,7 +1,9 @@
+'use client';
+
 import { useState, useEffect } from 'react';
-import { CalculationResult } from '../types';
-import { loadCalculations, deleteCalculation } from '../utils/storage';
-import { formatCurrency, formatDate, formatPeriod } from '../utils/formatting';
+import { CalculationResult } from '@/app/types';
+import { loadCalculations, deleteCalculation } from '@/app/lib/utils/storage';
+import { formatCurrency, formatDate, formatPeriod } from '@/app/lib/utils/formatting';
 
 interface CalculationHistoryProps {
   onSelectCalculation: (result: CalculationResult) => void;

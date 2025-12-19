@@ -1,10 +1,12 @@
+'use client';
+
 import { useState } from 'react';
 import CalculatorForm from './components/CalculatorForm';
 import CalculationSummary from './components/CalculationSummary';
 import CalculationHistory from './components/CalculationHistory';
 import { CalculationResult } from './types';
 
-function App() {
+export default function Home() {
   const [currentCalculation, setCurrentCalculation] = useState<CalculationResult | null>(null);
   const [historyRefreshTrigger, setHistoryRefreshTrigger] = useState(0);
   const [summaryKey, setSummaryKey] = useState<number>(0);
@@ -90,6 +92,4 @@ function App() {
     </div>
   );
 }
-
-export default App;
 

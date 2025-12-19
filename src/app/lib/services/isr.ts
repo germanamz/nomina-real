@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js';
-import { ISR_TAX_BRACKETS } from '../../shared/constants';
+import { ISR_TAX_BRACKETS } from '../constants';
 
 /**
  * Calculate ISR (Income Tax) based on progressive tax brackets

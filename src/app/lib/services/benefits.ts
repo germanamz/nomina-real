@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js';
-import { AGUINALDO_DAYS, VACATION_PREMIUM_RATE, VACATION_DAYS_BY_TENURE } from '../../shared/constants';
-import { CalculationPeriod } from '../../shared/types';
+import { AGUINALDO_DAYS, VACATION_PREMIUM_RATE, VACATION_DAYS_BY_TENURE } from '../constants';
+import { CalculationPeriod } from '@/app/types';
 
 /**
  * Get vacation days based on employee tenure

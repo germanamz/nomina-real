@@ -1,6 +1,8 @@
+'use client';
+
 import { useEffect, useState } from 'react';
-import { CalculationResult } from '../types';
-import { formatCurrency, formatPeriod } from '../utils/formatting';
+import { CalculationResult } from '@/app/types';
+import { formatCurrency, formatPeriod } from '@/app/lib/utils/formatting';
 
 interface CalculationSummaryProps {
   result: CalculationResult;

@@ -4,10 +4,13 @@ node_modules/
 # Build outputs
 dist/
 build/
+.next/
+out/
 
 # Environment
 .env
 .env.local
+.env*.local
 
 # IDE
 .vscode/
@@ -23,6 +26,6 @@ Thumbs.db
 *.log
 npm-debug.log*
 
-# Electron
-out/
+# Next.js
+.vercel
 

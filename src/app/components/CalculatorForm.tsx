@@ -1,8 +1,10 @@
+'use client';
+
 import { useState, useEffect } from 'react';
-import { CalculationInput, CalculationResult, IMSSRiskClassification, CalculationPeriod } from '../types';
-import { MEXICAN_STATES } from '../../shared/constants';
-import { calculateSalaryCosts } from '../services/calculations';
-import { saveCalculation } from '../utils/storage';
+import { CalculationInput, CalculationResult, IMSSRiskClassification, CalculationPeriod } from '@/app/types';
+import { MEXICAN_STATES } from '@/app/lib/constants';
+import { calculateSalaryCosts } from '@/app/lib/services/calculations';
+import { saveCalculation } from '@/app/lib/utils/storage';
 import PeriodSelector from './PeriodSelector';
 
 interface CalculatorFormProps {

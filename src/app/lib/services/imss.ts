@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js';
-import { IMSSRiskClassification } from '../../shared/types';
-import { IMSS_RISK_CLASSIFICATIONS as IMSS_RATES, IMSS_EMPLOYEE_RATE } from '../../shared/constants';
+import { IMSSRiskClassification } from '@/app/types';
+import { IMSS_RISK_CLASSIFICATIONS as IMSS_RATES, IMSS_EMPLOYEE_RATE } from '../constants';
 
 /**
  * Calculate IMSS employer contribution

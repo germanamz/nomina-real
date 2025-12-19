@@ -1,4 +1,6 @@
-import { CalculationPeriod } from '../types';
+'use client';
+
+import { CalculationPeriod } from '@/app/types';
 
 interface PeriodSelectorProps {
   value: CalculationPeriod;

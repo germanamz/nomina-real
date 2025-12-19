@@ -5,13 +5,13 @@ import {
   CalculationPeriod,
   EmployerCosts,
   EmployeeDeductions,
-} from '../../shared/types';
+} from '@/app/types';
 import {
   SAR_EMPLOYER_RATE,
   SAR_EMPLOYEE_RATE,
   INFONAVIT_RATE,
   MEXICAN_STATES,
-} from '../../shared/constants';
+} from '../constants';
 import { calculateISR } from './isr';
 import { calculateIMSSEmployer, calculateIMSSEmployee } from './imss';
 import {
