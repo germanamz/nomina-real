@@ -154,6 +154,10 @@ imss-calc/
 │       │   └── PeriodSelector.tsx
 │       ├── lib/            # Business logic and utilities
 │       │   ├── constants.ts
+│       │   ├── config/      # Tax configuration
+│       │   │   ├── tax-config.json    # All tax values and ISR brackets
+│       │   │   ├── types.ts           # Configuration type definitions
+│       │   │   └── loader.ts          # Configuration loader and validator
 │       │   ├── services/   # Calculation services
 │       │   │   ├── calculations.ts
 │       │   │   ├── isr.ts
@@ -181,6 +185,102 @@ imss-calc/
 - **Type Safety**: Full TypeScript coverage with strict type checking
 - **Client Components**: Uses Next.js App Router with client-side components for interactivity
 
+## Updating Tax Values and ISR Brackets
+
+All tax values, ISR brackets, and rates are now managed through a centralized configuration file. This makes it easy to update values when tax laws change without modifying code.
+
+### Configuration File Location
+
+The configuration file is located at:
+
+```
+src/app/lib/config/tax-config.json
+```
+
+### How to Update Tax Values
+
+1. **Open the configuration file**: `src/app/lib/config/tax-config.json`
+
+2. **Update the values you need**:
+
+   - **ISR Tax Brackets**: Modify the `isr.taxBrackets` array
+     - Each bracket has: `lowerLimit`, `upperLimit` (use `null` for Infinity), `rate`, and `fixedAmount`
+   - **IMSS Rates**: Update `imss.riskClassifications` (I-V) and `imss.employeeRate`
+   - **SAR Rates**: Update `sar.employerRate` and `sar.employeeRate`
+   - **INFONAVIT Rate**: Update `infonavit.rate`
+   - **Benefits**: Update `benefits.aguinaldoDays`, `benefits.vacationPremiumRate`, or `benefits.vacationDaysByTenure`
+   - **State Tax Rates**: Update individual state `payrollTaxRate` values in the `states` array
+
+3. **Update metadata** (optional but recommended):
+
+   - Update `version` field to reflect the tax year (e.g., "2025-2026")
+   - Update `lastUpdated` field with the date of changes (e.g., "2025-01-01")
+
+4. **Restart the development server** or rebuild:
+   ```bash
+   npm run dev
+   # or for production
+   npm run build
+   ```
+
+### Configuration Validation
+
+The configuration loader automatically validates:
+
+- All required fields are present
+- Tax rates are positive numbers
+- ISR brackets are in order and don't overlap
+- All risk classifications are defined
+- State configurations are complete
+
+If there are validation errors, they will be shown in the console when the app starts.
+
+### Example: Updating ISR Brackets
+
+To update ISR brackets for a new tax year, edit the `isr.taxBrackets` array:
+
+```json
+{
+  "isr": {
+    "taxBrackets": [
+      {
+        "lowerLimit": 0,
+        "upperLimit": 10000.0,
+        "rate": 0.02,
+        "fixedAmount": 0
+      },
+      {
+        "lowerLimit": 10000.01,
+        "upperLimit": null,
+        "rate": 0.3,
+        "fixedAmount": 200.0
+      }
+    ]
+  }
+}
+```
+
+Note: Use `null` for the `upperLimit` of the highest bracket to represent Infinity.
+
+### Example: Updating IMSS Rates
+
+To update IMSS employer contribution rates:
+
+```json
+{
+  "imss": {
+    "riskClassifications": {
+      "I": 13.5,
+      "II": 15.5,
+      "III": 17.5,
+      "IV": 20.5,
+      "V": 28.0
+    },
+    "employeeRate": 2.8
+  }
+}
+```
+
 ## Development
 
 ### Requirements
@@ -201,6 +301,7 @@ imss-calc/
 - Hot module replacement works automatically for React components
 - All calculations and history are stored in browser localStorage
 - The app is fully client-side - no backend server required
+- Tax configuration is loaded at build time from `tax-config.json`
 
 ## License
 

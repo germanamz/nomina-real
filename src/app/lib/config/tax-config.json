@@ -1,0 +1,151 @@
+{
+  "version": "2024-2025",
+  "lastUpdated": "2024-01-01",
+  "isr": {
+    "taxBrackets": [
+      {
+        "lowerLimit": 0,
+        "upperLimit": 8952.49,
+        "rate": 0.0192,
+        "fixedAmount": 0
+      },
+      {
+        "lowerLimit": 8952.5,
+        "upperLimit": 75984.96,
+        "rate": 0.064,
+        "fixedAmount": 171.89
+      },
+      {
+        "lowerLimit": 75984.97,
+        "upperLimit": 133536.07,
+        "rate": 0.1088,
+        "fixedAmount": 4456.07
+      },
+      {
+        "lowerLimit": 133536.08,
+        "upperLimit": 155229.8,
+        "rate": 0.16,
+        "fixedAmount": 10720.0
+      },
+      {
+        "lowerLimit": 155229.81,
+        "upperLimit": 185327.18,
+        "rate": 0.1792,
+        "fixedAmount": 14191.47
+      },
+      {
+        "lowerLimit": 185327.19,
+        "upperLimit": 374327.84,
+        "rate": 0.2136,
+        "fixedAmount": 19477.63
+      },
+      {
+        "lowerLimit": 374327.85,
+        "upperLimit": 451107.49,
+        "rate": 0.2352,
+        "fixedAmount": 59424.98
+      },
+      {
+        "lowerLimit": 451107.5,
+        "upperLimit": 902123.5,
+        "rate": 0.3,
+        "fixedAmount": 77513.05
+      },
+      {
+        "lowerLimit": 902123.51,
+        "upperLimit": 1804247.0,
+        "rate": 0.32,
+        "fixedAmount": 210563.65
+      },
+      {
+        "lowerLimit": 1804247.01,
+        "upperLimit": 4510617.5,
+        "rate": 0.34,
+        "fixedAmount": 419303.93
+      },
+      {
+        "lowerLimit": 4510617.51,
+        "upperLimit": null,
+        "rate": 0.35,
+        "fixedAmount": 1334253.58
+      }
+    ]
+  },
+  "imss": {
+    "riskClassifications": {
+      "I": 13.206,
+      "II": 15.206,
+      "III": 17.206,
+      "IV": 20.206,
+      "V": 27.706
+    },
+    "employeeRate": 2.727
+  },
+  "sar": {
+    "employerRate": 2.0,
+    "employeeRate": 1.125
+  },
+  "infonavit": {
+    "rate": 5.0
+  },
+  "benefits": {
+    "aguinaldoDays": 15,
+    "vacationPremiumRate": 0.25,
+    "vacationDaysByTenure": [
+      { "years": 1, "days": 12 },
+      { "years": 2, "days": 14 },
+      { "years": 3, "days": 16 },
+      { "years": 4, "days": 18 },
+      { "years": 5, "days": 20 },
+      { "years": 6, "days": 22 },
+      { "years": 7, "days": 24 },
+      { "years": 8, "days": 26 },
+      { "years": 9, "days": 28 },
+      { "years": 10, "days": 30 },
+      { "years": 11, "days": 32 },
+      { "years": 12, "days": 34 },
+      { "years": 13, "days": 36 },
+      { "years": 14, "days": 38 },
+      { "years": 15, "days": 40 },
+      { "years": 16, "days": 42 },
+      { "years": 17, "days": 44 },
+      { "years": 18, "days": 46 },
+      { "years": 19, "days": 48 },
+      { "years": 20, "days": 50 }
+    ]
+  },
+  "states": [
+    { "name": "Aguascalientes", "code": "AGS", "payrollTaxRate": 2.0 },
+    { "name": "Baja California", "code": "BC", "payrollTaxRate": 2.0 },
+    { "name": "Baja California Sur", "code": "BCS", "payrollTaxRate": 2.0 },
+    { "name": "Campeche", "code": "CAMP", "payrollTaxRate": 2.0 },
+    { "name": "Chiapas", "code": "CHIS", "payrollTaxRate": 2.0 },
+    { "name": "Chihuahua", "code": "CHIH", "payrollTaxRate": 2.0 },
+    { "name": "Ciudad de México", "code": "CDMX", "payrollTaxRate": 4.0 },
+    { "name": "Coahuila", "code": "COAH", "payrollTaxRate": 2.0 },
+    { "name": "Colima", "code": "COL", "payrollTaxRate": 2.0 },
+    { "name": "Durango", "code": "DGO", "payrollTaxRate": 2.0 },
+    { "name": "Guanajuato", "code": "GTO", "payrollTaxRate": 2.0 },
+    { "name": "Guerrero", "code": "GRO", "payrollTaxRate": 2.0 },
+    { "name": "Hidalgo", "code": "HGO", "payrollTaxRate": 2.0 },
+    { "name": "Jalisco", "code": "JAL", "payrollTaxRate": 2.0 },
+    { "name": "México", "code": "MEX", "payrollTaxRate": 2.0 },
+    { "name": "Michoacán", "code": "MICH", "payrollTaxRate": 2.0 },
+    { "name": "Morelos", "code": "MOR", "payrollTaxRate": 2.0 },
+    { "name": "Nayarit", "code": "NAY", "payrollTaxRate": 2.0 },
+    { "name": "Nuevo León", "code": "NL", "payrollTaxRate": 2.0 },
+    { "name": "Oaxaca", "code": "OAX", "payrollTaxRate": 2.0 },
+    { "name": "Puebla", "code": "PUE", "payrollTaxRate": 2.0 },
+    { "name": "Querétaro", "code": "QRO", "payrollTaxRate": 2.0 },
+    { "name": "Quintana Roo", "code": "QROO", "payrollTaxRate": 2.0 },
+    { "name": "San Luis Potosí", "code": "SLP", "payrollTaxRate": 2.0 },
+    { "name": "Sinaloa", "code": "SIN", "payrollTaxRate": 2.0 },
+    { "name": "Sonora", "code": "SON", "payrollTaxRate": 2.0 },
+    { "name": "Tabasco", "code": "TAB", "payrollTaxRate": 2.0 },
+    { "name": "Tamaulipas", "code": "TAM", "payrollTaxRate": 2.0 },
+    { "name": "Tlaxcala", "code": "TLAX", "payrollTaxRate": 2.0 },
+    { "name": "Veracruz", "code": "VER", "payrollTaxRate": 2.0 },
+    { "name": "Yucatán", "code": "YUC", "payrollTaxRate": 2.0 },
+    { "name": "Zacatecas", "code": "ZAC", "payrollTaxRate": 2.0 }
+  ]
+}
