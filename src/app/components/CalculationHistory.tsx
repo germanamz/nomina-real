@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { CalculationResult } from '@/app/types';
 import { loadCalculations, deleteCalculation } from '@/app/lib/utils/storage';
 import { formatCurrency, formatDate, formatPeriod } from '@/app/lib/utils/formatting';
+import { MEXICAN_STATES } from '@/app/lib/constants';
 
 interface CalculationHistoryProps {
   onSelectCalculation: (result: CalculationResult) => void;
@@ -55,6 +56,15 @@ export default function CalculationHistory({
     onSelectCalculation(newCalc);
   };
 
+  const getStateName = (stateCode: string): string => {
+    const state = MEXICAN_STATES.find(s => s.code === stateCode);
+    return state ? state.name : stateCode;
+  };
+
+  const getRiskClassLabel = (riskClass: string): string => {
+    return `Clase ${riskClass}`;
+  };
+
   if (!isOpen) {
     return null;
   }
@@ -102,8 +112,18 @@ export default function CalculationHistory({
                       {formatPeriod(calc.period)}
                     </span>
                   </div>
-                  <div className="text-xs text-gray-600 mb-1">
-                    Total: {formatCurrency(calc.totalCompanyCost)}
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xs text-gray-600">
+                      Total: {formatCurrency(calc.totalCompanyCost)}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xs px-2 py-0.5 bg-blue-100 text-blue-700 rounded font-medium">
+                      {getRiskClassLabel(calc.input.imssRiskClassification)}
+                    </span>
+                    <span className="text-xs px-2 py-0.5 bg-green-100 text-green-700 rounded font-medium">
+                      {getStateName(calc.input.state)}
+                    </span>
                   </div>
                   <div className="text-xs text-gray-400">
                     {formatDate(calc.timestamp)}
