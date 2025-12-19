@@ -1,10 +1,10 @@
 # IMSS Calculator
 
-A desktop application for calculating the total cost of employee salaries in Mexico, including all mandatory taxes, social security contributions, and benefits.
+A web application for calculating the total cost of employee salaries in Mexico, including all mandatory taxes, social security contributions, and benefits.
 
 ## Current State
 
-The application is **fully functional** and ready for use. All core features have been implemented and tested.
+The application is **fully functional** and ready for use. All core features have been implemented and tested. This is a Next.js web application that runs in the browser.
 
 ### ✅ Implemented Features
 
@@ -46,14 +46,16 @@ The application is **fully functional** and ready for use. All core features hav
 - **Technical Features**
   - Precise financial calculations using decimal.js
   - Type-safe implementation with TypeScript
-  - Cross-platform desktop app with Electron
+  - Modern web application built with Next.js
+  - Client-side local storage for calculation history
+  - Responsive design that works on desktop and mobile
   - Hot reload in development mode
   - Production build configuration ready
 
 ## Technologies
 
-- **Electron** - Cross-platform desktop application
-- **React** - UI framework
+- **Next.js 15** - React framework for web applications
+- **React 18** - UI framework
 - **TypeScript** - Type safety
 - **Tailwind CSS** - Styling
 - **decimal.js** - Precise financial calculations
@@ -73,10 +75,18 @@ npm install
 npm run dev
 ```
 
+The application will be available at `http://localhost:3000`
+
 3. Build for production:
 
 ```bash
 npm run build
+```
+
+4. Start production server:
+
+```bash
+npm start
 ```
 
 ## Usage
@@ -136,36 +146,40 @@ npm run build
 ```
 imss-calc/
 ├── src/
-│   ├── main/              # Electron main process
-│   │   ├── main.ts        # Main entry point
-│   │   └── preload.ts     # Preload script
-│   ├── renderer/           # React application
-│   │   ├── components/     # UI components
-│   │   │   ├── CalculatorForm.tsx
-│   │   │   ├── CalculationSummary.tsx
-│   │   │   ├── CalculationHistory.tsx
-│   │   │   └── PeriodSelector.tsx
-│   │   ├── services/       # Business logic
-│   │   │   ├── calculations.ts
-│   │   │   ├── isr.ts
-│   │   │   ├── imss.ts
-│   │   │   └── benefits.ts
-│   │   ├── utils/          # Utilities
-│   │   │   ├── storage.ts
-│   │   │   └── formatting.ts
-│   │   └── App.tsx
-│   └── shared/             # Shared types/constants
-│       ├── constants.ts
-│       └── types.ts
+│   └── app/                # Next.js App Router
+│       ├── components/      # UI components
+│       │   ├── CalculatorForm.tsx
+│       │   ├── CalculationSummary.tsx
+│       │   ├── CalculationHistory.tsx
+│       │   └── PeriodSelector.tsx
+│       ├── lib/            # Business logic and utilities
+│       │   ├── constants.ts
+│       │   ├── services/   # Calculation services
+│       │   │   ├── calculations.ts
+│       │   │   ├── isr.ts
+│       │   │   ├── imss.ts
+│       │   │   └── benefits.ts
+│       │   └── utils/      # Utilities
+│       │       ├── storage.ts
+│       │       └── formatting.ts
+│       ├── types/          # TypeScript types
+│       │   └── index.ts
+│       ├── page.tsx        # Main page component
+│       ├── layout.tsx      # Root layout
+│       └── globals.css     # Global styles
+├── next.config.ts          # Next.js configuration
+├── tailwind.config.js      # Tailwind CSS configuration
+└── tsconfig.json           # TypeScript configuration
 ```
 
 ### Key Implementation Details
 
 - **Precise Calculations**: All monetary calculations use `decimal.js` to avoid floating-point errors
 - **Period Conversion**: All calculations are normalized to annual amounts first, then converted to the selected period
-- **Local Storage**: Uses browser localStorage (via Electron) to persist calculation history
+- **Local Storage**: Uses browser `localStorage` API to persist calculation history client-side
 - **State Management**: React hooks for component state, no external state management library needed
 - **Type Safety**: Full TypeScript coverage with strict type checking
+- **Client Components**: Uses Next.js App Router with client-side components for interactivity
 
 ## Development
 
@@ -176,18 +190,17 @@ imss-calc/
 
 ### Available Scripts
 
-- `npm run dev` - Start development mode (builds main process, starts React dev server and Electron)
-- `npm run build` - Build for production (compiles TypeScript, builds React app, packages with Electron Builder)
-- `npm run build:main` - Compile main process TypeScript
-- `npm run build:renderer` - Build React application
-- `npm run preview` - Preview the built React app
+- `npm run dev` - Start Next.js development server (runs on http://localhost:3000)
+- `npm run build` - Build for production (creates optimized production build)
+- `npm start` - Start production server (requires build first)
+- `npm run lint` - Run ESLint to check code quality
 
 ### Development Notes
 
-- The main process TypeScript must be compiled before running Electron
-- React dev server runs on port 5173
-- Electron automatically opens DevTools in development mode
-- Hot module replacement works for React components
+- Next.js dev server runs on port 3000 by default
+- Hot module replacement works automatically for React components
+- All calculations and history are stored in browser localStorage
+- The app is fully client-side - no backend server required
 
 ## License
 
