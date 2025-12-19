@@ -36,3 +36,33 @@ export function formatPeriod(period: string): string {
   return periodMap[period] || period;
 }
 
+/**
+ * Format period/annual labels consistently
+ */
+export function formatPeriodLabel(period: string): string {
+  return formatPeriod(period);
+}
+
+export function formatAnnualLabel(): string {
+  return 'Anual';
+}
+
+/**
+ * Format benefit names for display
+ */
+export function formatBenefitName(name: string): string {
+  const nameMap: Record<string, string> = {
+    aguinaldo: 'Aguinaldo',
+    vacationPremium: 'Prima Vacacional',
+    ptu: 'PTU',
+    performanceBonus: 'Bono de Desempeño',
+    signingBonus: 'Bono de Contratación',
+    retentionBonus: 'Bono de Retención',
+    mealVouchers: 'Vales de Comida',
+    transportation: 'Transporte',
+    healthInsurance: 'Seguro de Salud',
+    lifeInsurance: 'Seguro de Vida',
+  };
+  return nameMap[name] || name;
+}
+

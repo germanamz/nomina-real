@@ -64,6 +64,13 @@ export default function CalculationHistory({
       employerCosts: { ...calc.employerCosts },
       employeeDeductions: { ...calc.employeeDeductions },
       timestamp: new Date(calc.timestamp),
+      // Copy annual fields if they exist
+      ...('grossSalaryAnnual' in calc && { grossSalaryAnnual: calc.grossSalaryAnnual }),
+      ...('employerCostsAnnual' in calc && { employerCostsAnnual: calc.employerCostsAnnual }),
+      ...('employeeDeductionsAnnual' in calc && { employeeDeductionsAnnual: calc.employeeDeductionsAnnual }),
+      ...('netSalaryAnnual' in calc && { netSalaryAnnual: calc.netSalaryAnnual }),
+      ...('totalCompanyCostAnnual' in calc && { totalCompanyCostAnnual: calc.totalCompanyCostAnnual }),
+      ...('additionalBenefitsBreakdown' in calc && { additionalBenefitsBreakdown: calc.additionalBenefitsBreakdown }),
     };
     onSelectCalculation(newCalc);
   };

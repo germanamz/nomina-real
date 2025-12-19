@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { CalculationInput, CalculationResult, IMSSRiskClassification, CalculationPeriod } from '@/app/types';
+import { CalculationInput, CalculationResult, IMSSRiskClassification, CalculationPeriod, AdditionalBenefits, AdditionalBenefit } from '@/app/types';
 import { MEXICAN_STATES } from '@/app/lib/constants';
 import { calculateSalaryCosts } from '@/app/lib/services/calculations';
 import { saveCalculation } from '@/app/lib/utils/storage';
@@ -20,6 +20,15 @@ export default function CalculatorForm({ onCalculate, selectedCalculation }: Cal
   const [ptuAmount, setPtuAmount] = useState<string>('');
   const [employeeTenureYears, setEmployeeTenureYears] = useState<string>('1');
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [showAdditionalBenefits, setShowAdditionalBenefits] = useState<boolean>(false);
+  const [performanceBonus, setPerformanceBonus] = useState<string>('');
+  const [signingBonus, setSigningBonus] = useState<string>('');
+  const [retentionBonus, setRetentionBonus] = useState<string>('');
+  const [mealVouchers, setMealVouchers] = useState<string>('');
+  const [transportation, setTransportation] = useState<string>('');
+  const [healthInsurance, setHealthInsurance] = useState<string>('');
+  const [lifeInsurance, setLifeInsurance] = useState<string>('');
+  const [otherBenefits, setOtherBenefits] = useState<Array<{ name: string; amount: string; isAnnual: boolean }>>([]);
 
   // Update form fields when a calculation is selected from history
   useEffect(() => {
@@ -30,6 +39,23 @@ export default function CalculatorForm({ onCalculate, selectedCalculation }: Cal
       setImssRiskClassification(selectedCalculation.input.imssRiskClassification);
       setPtuAmount(selectedCalculation.input.ptuAmount ? selectedCalculation.input.ptuAmount.toString() : '');
       setEmployeeTenureYears(selectedCalculation.input.employeeTenureYears.toString());
+      
+      // Load additional benefits if they exist
+      if (selectedCalculation.input.additionalBenefits) {
+        const ab = selectedCalculation.input.additionalBenefits;
+        setPerformanceBonus(ab.performanceBonus?.toString() || '');
+        setSigningBonus(ab.signingBonus?.toString() || '');
+        setRetentionBonus(ab.retentionBonus?.toString() || '');
+        setMealVouchers(ab.mealVouchers?.toString() || '');
+        setTransportation(ab.transportation?.toString() || '');
+        setHealthInsurance(ab.healthInsurance?.toString() || '');
+        setLifeInsurance(ab.lifeInsurance?.toString() || '');
+        setOtherBenefits(ab.other?.map(b => ({ name: b.name, amount: b.amount.toString(), isAnnual: b.isAnnual })) || []);
+        setShowAdditionalBenefits(true);
+      } else {
+        setShowAdditionalBenefits(false);
+      }
+      
       setErrors({});
     }
   }, [selectedCalculation]);
@@ -54,12 +80,48 @@ export default function CalculatorForm({ onCalculate, selectedCalculation }: Cal
     return Object.keys(newErrors).length === 0;
   };
 
+  const addOtherBenefit = () => {
+    setOtherBenefits([...otherBenefits, { name: '', amount: '', isAnnual: false }]);
+  };
+
+  const removeOtherBenefit = (index: number) => {
+    setOtherBenefits(otherBenefits.filter((_, i) => i !== index));
+  };
+
+  const updateOtherBenefit = (index: number, field: 'name' | 'amount' | 'isAnnual', value: string | boolean) => {
+    const updated = [...otherBenefits];
+    updated[index] = { ...updated[index], [field]: value };
+    setOtherBenefits(updated);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validate()) {
       return;
     }
+
+    // Build additional benefits object
+    const additionalBenefits: AdditionalBenefits | undefined = 
+      performanceBonus || signingBonus || retentionBonus || mealVouchers || 
+      transportation || healthInsurance || lifeInsurance || otherBenefits.length > 0
+        ? {
+            performanceBonus: performanceBonus ? parseFloat(performanceBonus) : undefined,
+            signingBonus: signingBonus ? parseFloat(signingBonus) : undefined,
+            retentionBonus: retentionBonus ? parseFloat(retentionBonus) : undefined,
+            mealVouchers: mealVouchers ? parseFloat(mealVouchers) : undefined,
+            transportation: transportation ? parseFloat(transportation) : undefined,
+            healthInsurance: healthInsurance ? parseFloat(healthInsurance) : undefined,
+            lifeInsurance: lifeInsurance ? parseFloat(lifeInsurance) : undefined,
+            other: otherBenefits
+              .filter(b => b.name && b.amount)
+              .map(b => ({
+                name: b.name,
+                amount: parseFloat(b.amount),
+                isAnnual: b.isAnnual,
+              })),
+          }
+        : undefined;
 
     const input: CalculationInput = {
       grossSalary: parseFloat(grossSalary),
@@ -68,6 +130,7 @@ export default function CalculatorForm({ onCalculate, selectedCalculation }: Cal
       imssRiskClassification,
       ptuAmount: ptuAmount ? parseFloat(ptuAmount) : undefined,
       employeeTenureYears: parseFloat(employeeTenureYears),
+      additionalBenefits,
     };
 
     const result = calculateSalaryCosts(input);
@@ -177,6 +240,190 @@ export default function CalculatorForm({ onCalculate, selectedCalculation }: Cal
           <p className="mt-1 text-xs text-gray-500">
             Ingrese el monto del PTU para el período seleccionado
           </p>
+        </div>
+
+        {/* Additional Benefits Section */}
+        <div className="border-t border-gray-200 pt-4">
+          <button
+            type="button"
+            onClick={() => setShowAdditionalBenefits(!showAdditionalBenefits)}
+            className="w-full flex items-center justify-between text-left text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none"
+          >
+            <span>Beneficios Adicionales y Bonos (Opcional)</span>
+            <svg
+              className={`w-5 h-5 transform transition-transform ${
+                showAdditionalBenefits ? 'rotate-180' : ''
+              }`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          {showAdditionalBenefits && (
+            <div className="mt-4 space-y-4 pl-4 border-l-2 border-gray-200">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Bono de Desempeño (Anual)
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={performanceBonus}
+                  onChange={(e) => setPerformanceBonus(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="0.00"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Bono de Contratación (Una vez, anualizado)
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={signingBonus}
+                  onChange={(e) => setSigningBonus(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="0.00"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Bono de Retención (Anual)
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={retentionBonus}
+                  onChange={(e) => setRetentionBonus(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="0.00"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Vales de Comida (Por período)
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={mealVouchers}
+                  onChange={(e) => setMealVouchers(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="0.00"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Transporte (Por período)
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={transportation}
+                  onChange={(e) => setTransportation(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="0.00"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Seguro de Salud (Por período, contribución del empleador)
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={healthInsurance}
+                  onChange={(e) => setHealthInsurance(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="0.00"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Seguro de Vida (Por período, contribución del empleador)
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={lifeInsurance}
+                  onChange={(e) => setLifeInsurance(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="0.00"
+                />
+              </div>
+
+              {/* Other Benefits */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Otros Bonos
+                  </label>
+                  <button
+                    type="button"
+                    onClick={addOtherBenefit}
+                    className="text-sm text-blue-600 hover:text-blue-800"
+                  >
+                    + Agregar
+                  </button>
+                </div>
+                {otherBenefits.map((benefit, index) => (
+                  <div key={index} className="mb-3 p-3 bg-gray-50 rounded-md space-y-2">
+                    <input
+                      type="text"
+                      value={benefit.name}
+                      onChange={(e) => updateOtherBenefit(index, 'name', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Nombre del bono"
+                    />
+                    <div className="flex gap-2">
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        value={benefit.amount}
+                        onChange={(e) => updateOtherBenefit(index, 'amount', e.target.value)}
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Monto"
+                      />
+                      <label className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-white">
+                        <input
+                          type="checkbox"
+                          checked={benefit.isAnnual}
+                          onChange={(e) => updateOtherBenefit(index, 'isAnnual', e.target.checked)}
+                          className="rounded"
+                        />
+                        <span className="text-sm text-gray-700">Anual</span>
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => removeOtherBenefit(index)}
+                        className="px-3 py-2 text-red-600 hover:text-red-800"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         <button
