@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { CalculationResult } from '@/app/types';
-import { loadCalculations, deleteCalculation } from '@/app/lib/utils/storage';
+import { loadCalculations, deleteCalculation, clearAllCalculations } from '@/app/lib/utils/storage';
 import { formatCurrency, formatDate, formatPeriod } from '@/app/lib/utils/formatting';
 import { MEXICAN_STATES } from '@/app/lib/constants';
 
@@ -10,12 +10,14 @@ interface CalculationHistoryProps {
   onSelectCalculation: (result: CalculationResult) => void;
   refreshTrigger?: number;
   isOpen?: boolean;
+  onHistoryCleared?: () => void;
 }
 
 export default function CalculationHistory({
   onSelectCalculation,
   refreshTrigger,
   isOpen = true,
+  onHistoryCleared,
 }: CalculationHistoryProps) {
   const [calculations, setCalculations] = useState<CalculationResult[]>([]);
 
@@ -41,6 +43,16 @@ export default function CalculationHistory({
     if (window.confirm('¿Está seguro de eliminar este cálculo?')) {
       deleteCalculation(id);
       loadHistory();
+    }
+  };
+
+  const handleClearAll = () => {
+    if (window.confirm('¿Está seguro de eliminar todo el historial? Esta acción no se puede deshacer.')) {
+      clearAllCalculations();
+      loadHistory();
+      if (onHistoryCleared) {
+        onHistoryCleared();
+      }
     }
   };
 
@@ -72,9 +84,20 @@ export default function CalculationHistory({
   return (
     <div className="h-full flex flex-col">
       <div className="p-4 border-b border-gray-200 flex-shrink-0">
-        <h2 className="text-lg font-semibold text-gray-900">Historial</h2>
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-lg font-semibold text-gray-900">Historial</h2>
+          {calculations.length > 0 && (
+            <button
+              onClick={handleClearAll}
+              className="text-xs text-red-600 hover:text-red-700 font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors"
+              title="Limpiar todo el historial"
+            >
+              Limpiar
+            </button>
+          )}
+        </div>
         {calculations.length > 0 && (
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-gray-500">
             {calculations.length} {calculations.length === 1 ? 'cálculo' : 'cálculos'}
           </p>
         )}

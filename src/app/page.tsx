@@ -4,6 +4,7 @@ import { useState } from 'react';
 import CalculatorForm from './components/CalculatorForm';
 import CalculationSummary from './components/CalculationSummary';
 import CalculationHistory from './components/CalculationHistory';
+import PrivacyDisclaimer from './components/PrivacyDisclaimer';
 import { CalculationResult } from './types';
 
 export default function Home() {
@@ -26,6 +27,13 @@ export default function Home() {
     setCurrentCalculation(calc);
   };
 
+  const handleHistoryCleared = () => {
+    // Clear current calculation if it was from history
+    setCurrentCalculation(null);
+    // Trigger history refresh
+    setHistoryRefreshTrigger(prev => prev + 1);
+  };
+
   return (
     <div className="h-screen bg-gray-50 flex overflow-hidden">
       {/* Sidebar */}
@@ -38,6 +46,7 @@ export default function Home() {
           onSelectCalculation={handleSelectFromHistory}
           refreshTrigger={historyRefreshTrigger}
           isOpen={sidebarOpen}
+          onHistoryCleared={handleHistoryCleared}
         />
       </div>
 
@@ -86,6 +95,7 @@ export default function Home() {
             {currentCalculation && (
               <CalculationSummary key={`calc-${currentCalculation.id}-${summaryKey}`} result={currentCalculation} />
             )}
+            <PrivacyDisclaimer onHistoryCleared={handleHistoryCleared} />
           </div>
         </div>
       </div>
